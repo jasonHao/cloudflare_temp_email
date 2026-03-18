@@ -63,9 +63,12 @@ jobs:
           if [ "$debug_mode" = "true" ]; then
             pnpm run deploy
           else
+            set +e
             output=$(pnpm run deploy 2>&1)
-            if [ $? -ne 0 ]; then
-                code=$?
+            code=$?
+            set -e
+            if [ $code -ne 0 ]; then
+                echo "$output"
                 echo "Command failed with exit code $code"
                 exit $code
             fi
