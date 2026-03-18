@@ -32,12 +32,12 @@ jobs:
 
       - name: Deploy Backend for ${{ github.ref_name }}
         run: |
-          pnpm config set ignore-scripts false
           export use_worker_assets=${{ secrets.USE_WORKER_ASSETS }}
           export use_worker_assets_with_telegram=${{ secrets.USE_WORKER_ASSETS_WITH_TELEGRAM }}
           if [ -n "$use_worker_assets" ]; then
             cd frontend/
-              pnpm install --no-frozen-lockfile --ignore-scripts=false --loglevel debug            if [ -n "$use_worker_assets_with_telegram" ]; then
+            pnpm install --no-frozen-lockfile
+            if [ -n "$use_worker_assets_with_telegram" ]; then
               echo "Building with telegram pages"
               pnpm build:telegram:pages
             else
@@ -51,8 +51,7 @@ jobs:
           export use_mail_wasm_parser=${{ secrets.BACKEND_USE_MAIL_WASM_PARSER }}
           cd worker/
           echo '${{ secrets.BACKEND_TOML }}' > wrangler.toml
-          pnpm install --no-frozen-lockfile --ignore-scripts=false --loglevel debug           
-          if [ -n "$use_worker_assets_with_telegram" ]; then
+          pnpm install --no-frozen-lockfile
           if [ -n "$use_mail_wasm_parser" ]; then
             echo "Using mail-parser-wasm-worker"
             pnpm add mail-parser-wasm-worker
